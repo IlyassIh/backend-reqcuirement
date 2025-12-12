@@ -27,6 +27,9 @@ const PORT = process.env.PORT || 3000;
 
 app.use('/admin', routeAdmin);
 app.use('/', routeUser);
+app.get('/', (req, res) => {
+  res.send('Backend is running!');
+});
 
 app.listen(PORT, () => console.log("Backend running on port " + PORT));
 
