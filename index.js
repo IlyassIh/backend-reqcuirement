@@ -1,35 +1,33 @@
 import express from 'express';
-import routeAdmin from './routes/apiAdmin.js';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './database/DB.js';
+import routeAdmin from './routes/apiAdmin.js';
 import routeUser from './routes/apiUsers.js';
-import cors from 'cors';
 
 dotenv.config();
 connectDB();
 
 const app = express();
 
-// CORS setup
+// CORS setup for your frontend
 app.use(cors({
-    origin: 'https://ih-agency.vercel.app', // your frontend URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
+  origin: 'https://ih-agency.vercel.app', // your frontend
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization'],
+  credentials: true
 }));
 
-// Handle preflight requests for all routes
-app.options('*', cors());
+// Remove this line, it crashes the app:
+// app.options('*', cors());
 
 app.use(express.json());
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 app.use('/admin', routeAdmin);
 app.use('/', routeUser);
 
-if (process.env.NODE_ENV !== 'test') {
-    app.listen(PORT, () => console.log("connected to port " + PORT));
-}
+app.listen(PORT, () => console.log("Backend running on port " + PORT));
 
 export default app;
